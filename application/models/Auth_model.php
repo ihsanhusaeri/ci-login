@@ -58,4 +58,11 @@ class Auth_model extends CI_Model
         $this->db->where('email', $email);
         $this->db->update('user');
     }
+
+    public function update_password($hashed_password, $email)
+    {
+        $this->db->set('password', $hashed_password);
+        $this->db->where('email', $email);
+        $this->db->update('user');
+    }
 }
