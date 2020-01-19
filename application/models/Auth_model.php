@@ -30,4 +30,32 @@ class Auth_model extends CI_Model
     {
         return $this->db->get_where('user', ['email' => $email])->row_array();
     }
+    public function update_user($user, $old_image)
+    {
+        $new_image = $_FILES['image'];
+        if ($new_image) {
+            $config['upload_path'] = './assets/img/profile/';
+            $config['allowed_types'] = 'gif|jpg|png';
+            $config['max_size']     = '2048';
+
+            $this->load->library('upload', $config);
+
+            if ($this->upload->do_upload('image')) {
+                $new_image_filename = $this->upload->data('file_name');
+                $this->db->set('image', $new_image_filename);
+            } else {
+                echo $this->upload->display_errors();
+            }
+
+            if ($old_image != "default.jpg") {
+                unlink(FCPATH . "assets/img/profile/" . $old_image);
+            }
+        }
+        $name = $user['name'];
+        $email = $user['email'];
+
+        $this->db->set('name', $name);
+        $this->db->where('email', $email);
+        $this->db->update('user');
+    }
 }
