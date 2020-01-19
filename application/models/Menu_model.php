@@ -3,6 +3,7 @@ class Menu_model extends CI_Model
 {
     public function get_menus()
     {
+        $this->db->where('id !=', 1);
         $menus = $this->db->get('user_menu')->result_array();
         return $menus;
     }
